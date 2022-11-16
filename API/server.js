@@ -20,6 +20,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 const Todo = require('./models/Todo');
 const User = require('./models/Users');
+const Cat = require('./models/Category');
 
 app.post('/user/new', async(req,res) =>{
     let exist = await User.findOne({googleId: req.body.googleId});
@@ -68,11 +69,21 @@ app.get('/todos/:id', async(req,res) =>{
     }
 });
 
+app.get('/cats/:id', async(req,res) =>{
+    try{
+    const cats = await Cat.find({googleId:req.params.id});
+    res.json(cats);
+    }catch(error){
+        console.log(error);
+    }
+});
+
 app.post('/todo/new', async(req,res) =>{
     try{
         const todo = new Todo({
             googleId: req.body.googleId,
-            text: req.body.text
+            text: req.body.text,
+            category: req.body.category
         });
         todo.save();
         res.json(todo);
@@ -83,11 +94,51 @@ app.post('/todo/new', async(req,res) =>{
     
 });
 
+
+
+
+app.post('/cat/new', async(req,res) =>{
+    try{
+        const cat = new Cat({
+            googleId: req.body.googleId,
+            name: req.body.name,
+        });
+        cat.save();
+        res.json(cat);
+    }
+    catch(err){
+        console.log(err);
+    }
+    
+});
+
+app.put("/cat/:id",async (req, res) =>{
+    try{
+        const updatedCat = await Cat.findByIdAndUpdate(req.params.id,{
+            $set: req.body
+        },{new: true})
+        res.status(200).json(updatedCat)
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
+
+
 app.delete('/todo/delete/:id', async(req,res) =>{
     try{
     const result = await Todo.findByIdAndDelete(req.params.id);
 
     res.json(result);
+    }catch(error){
+        console.log(error);
+    }
+});
+
+app.delete('/cat/delete/:id', async(req,res) =>{
+    try{
+    const result = await Cat.findByIdAndDelete(req.params.id);
+    res.json(result);
+
     }catch(error){
         console.log(error);
     }

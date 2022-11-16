@@ -14,11 +14,12 @@ const TodoSchema = new Schema({
         type: Boolean,
         default: false
     },
-    timestamp: {
+    category:{
         type: String,
-        default: Date.now()
+        default: "NA"
     }
-})
+    
+},{timestamps: true})
 
 const Todo = mongoose.model("Todo",TodoSchema);
 
