@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-const URL = 'mongodb+srv://jainakshat:taradevi123@cluster0.ewp3c.mongodb.net/todo?retryWrites=true&w=majority';
+const URL = "#MONGOURI#";
 
 mongoose.connect(process.env.MONGODB_URI || URL,{
     useNewUrlParser: true,
